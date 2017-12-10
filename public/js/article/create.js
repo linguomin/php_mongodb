@@ -1,0 +1,31 @@
+$(()=>{
+  $.get("http://localhost/php_mongodb/routes/users/isLogin.php")
+  .then(data=>{
+    if(data.ok==0)
+      location="../user/login.html";
+
+    $("#formCreate").submit(e=>{
+      e.preventDefault();
+      var $txtTitle=$("[name=title]"),
+          $txtContent=$("[name=content]");
+      if($txtTitle.val().trim()=="")
+        $txtTitle.next("label").show();
+      else{
+        $txtTitle.next("label").hide();
+        if($txtContent.val().trim()=="")
+          $txtContent.next("label").show();
+        else{
+          $txtContent.next("label").hide();
+          if(confirm("是否继续保存?"))
+            $.post(
+              "../../routes/articles/createArticle.php",
+              $(e.target).serialize()
+            ).then(()=>{
+              alert("保存成功!");
+              $(e.target)[0].reset();
+            })
+        }
+      }
+    })
+  })
+})
